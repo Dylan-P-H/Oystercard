@@ -35,4 +35,5 @@ describe Oystercard do
     subject.top_up(0)
     expect{ subject.touch_in }.to raise_error "Insufficient funds for minimum fair"
   end
+  
 end
