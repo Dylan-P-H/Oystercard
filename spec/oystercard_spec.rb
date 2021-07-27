@@ -35,5 +35,8 @@ describe Oystercard do
     subject.top_up(0)
     expect{ subject.touch_in }.to raise_error "Insufficient funds for minimum fair"
   end
-  
+  it "Should deduct from my balance when I make a trip" do
+    subject.top_up(10)
+    expect { subject.touch_out }.to change{ subject.balance }.by(-1)
+  end
 end

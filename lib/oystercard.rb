@@ -10,14 +10,12 @@ class Oystercard
     fail "Balance limit is #{BALANCE_LIMIT}" if @balance == 90
     @balance += amount
   end
-  def deduct(amount)
-    @balance -= amount
-  end
   def touch_in
     fail "Insufficient funds for minimum fair" if @balance < MINIMUM_FAIR
     @card_state = "ACTIVATED"
   end
   def touch_out
+    @balance -= 1
     @card_state = "DEACTIVED"
   end
   def in_journey?
@@ -26,5 +24,9 @@ class Oystercard
     else
       return false
     end
+  end
+  private
+  def deduct(amount)
+    @balance -= amount
   end
 end
