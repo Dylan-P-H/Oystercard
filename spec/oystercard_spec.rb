@@ -15,4 +15,11 @@ describe Oystercard do
       expect{ subject.top_up 1 }.to raise_error "Balance limit is #{balance_limit}"
     end
   end
+  describe "#deduct" do
+    it "Should deduct amount from balance" do
+      subject.top_up(20)
+      subject.deduct(20)
+      expect( subject.balance ).to eq(0)
+    end
+  end
 end
