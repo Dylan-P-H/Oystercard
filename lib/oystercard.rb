@@ -1,5 +1,5 @@
 class Oystercard
-  attr_reader :balance, :card_state, :in_journey, :entry_station
+  attr_reader :balance, :card_state, :in_journey, :entry_station, :exit_station, :journey_log
 
   BALANCE_LIMIT = 90
   MINIMUM_FAIR = 1
@@ -9,6 +9,8 @@ class Oystercard
     @card_state = "DEACTIVATED"
     @in_journey = false
     @entry_station = nil
+    @exit_station = nil
+    @journey_log = {}
   end
 
   def top_up(amount)
@@ -23,9 +25,10 @@ class Oystercard
     @entry_station = station
   end
 
-  def touch_out
+  def touch_out(exit_station)
     deduct(MINIMUM_FAIR)
-    @entry_station = nil
+    @exit_station = exit_station
+    @journey_log.store(@entry_station, @exit_station)
     @card_state = "DEACTIVED"
   end
 

@@ -3,6 +3,9 @@ require 'oystercard'
 describe Oystercard do
 
   let(:station) { double :station }
+  let(:entry_station) { double :station }
+  let(:exit_station) { double :station }
+  let(:journey) { {entry_station: entry_station, exit_station: exit_station} }
 
   it "Has a balance of zero" do
     expect(subject.balance).to eq(0)
@@ -37,7 +40,7 @@ describe Oystercard do
   end
 
   it "Should change card_state if user invokes touch_out" do
-    subject.touch_out
+    subject.touch_out(:station)
     expect( subject.in_journey? ).to eq(false)
   end
 
@@ -48,13 +51,31 @@ describe Oystercard do
 
   it "Should deduct from my balance when I make a trip" do
     subject.top_up(10)
-    expect { subject.touch_out }.to change{ subject.balance }.by(-1)
+    expect { subject.touch_out(:station) }.to change{ subject.balance }.by(-1)
   end
 
-  it "stores the entry station" do
+  it "Stores the entry station" do
     subject.top_up(10)
     subject.touch_in(:station)
-    expect(subject.entry_station).to eq(:station)
+    expect( subject.entry_station ).to eq(:station)
+  end
+
+  it "Should store journeys in a hash" do
+    expect( subject.journey_log ).to be_empty
+  end
+
+  it "Stores the exit station" do
+    subject.top_up(10)
+    subject.touch_in(entry_station)
+    subject.touch_out(exit_station)
+    expect( subject.exit_station ).to eq exit_station
+  end
+
+  it "Stores the users journey in the instance variable hash" do
+    subject.top_up(10)
+    subject.touch_in(entry_station)
+    subject.touch_out(exit_station)
+    expect( subject.journey_log.length ).to eq(1)
   end
 
 end
