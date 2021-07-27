@@ -17,9 +17,10 @@ describe Oystercard do
   end
   describe "#deduct" do
     it "Should deduct amount from balance" do
-      subject.top_up(20)
-      subject.deduct(20)
-      expect( subject.balance ).to eq(0)
+      test = Oystercard.new
+      test.top_up(20)
+      test.send(:deduct, 20)
+      expect( test.balance ).to eq(0)
     end
   end
   it "If user has touched in, in_journey? method should be true" do
