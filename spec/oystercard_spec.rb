@@ -22,4 +22,17 @@ describe Oystercard do
       expect( subject.balance ).to eq(0)
     end
   end
+  it "If user has touched in, in_journey? method should be true" do
+    subject.top_up(10)
+    subject.touch_in
+    expect( subject.in_journey? ).to eq(true)
+  end
+  it "Should change card_state if user invokes touch_out" do
+    subject.touch_out
+    expect( subject.in_journey? ).to eq(false)
+  end
+  it "Should fail if balance is less than minumum fair when touching in" do
+    subject.top_up(0)
+    expect{ subject.touch_in }.to raise_error "Insufficient funds for minimum fair"
+  end
 end
