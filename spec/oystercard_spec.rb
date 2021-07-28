@@ -33,17 +33,6 @@ describe Oystercard do
     end
   end
 
-  it "If user has touched in, in_journey? method should be true" do
-    subject.top_up(10)
-    subject.touch_in(:station)
-    expect( subject.in_journey? ).to eq(true)
-  end
-
-  it "Should change card_state if user invokes touch_out" do
-    subject.touch_out(:station)
-    expect( subject.in_journey? ).to eq(false)
-  end
-
   it "Should fail if balance is less than minumum fair when touching in" do
     subject.top_up(0)
     expect{ subject.touch_in(:station) }.to raise_error "Insufficient funds for minimum fair"
@@ -54,28 +43,15 @@ describe Oystercard do
     expect { subject.touch_out(:station) }.to change{ subject.balance }.by(-1)
   end
 
-  it "Stores the entry station" do
-    subject.top_up(10)
-    subject.touch_in(:station)
-    expect( subject.entry_station ).to eq(:station)
-  end
-
   it "Should store journeys in a hash" do
     expect( subject.journey_log ).to be_empty
   end
 
-  it "Stores the exit station" do
-    subject.top_up(10)
-    subject.touch_in(entry_station)
-    subject.touch_out(exit_station)
-    expect( subject.exit_station ).to eq exit_station
-  end
-
-  it "Stores the users journey in the instance variable hash" do
-    subject.top_up(10)
-    subject.touch_in(entry_station)
-    subject.touch_out(exit_station)
-    expect( subject.journey_log.length ).to eq(1)
-  end
+  # it "Stores the users journey in the instance variable hash" do
+  #   subject.top_up(10)
+  #   subject.touch_in(entry_station)
+  #   subject.touch_out(exit_station)
+  #   expect( subject.journey_log.length ).to eq(1)
+  # end
 
 end

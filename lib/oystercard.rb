@@ -1,3 +1,5 @@
+require 'journey'
+
 class Oystercard
   attr_reader :balance, :card_state, :in_journey, :entry_station, :exit_station, :journey_log
 
@@ -6,10 +8,7 @@ class Oystercard
 
   def initialize
     @balance = 0
-    @card_state = "DEACTIVATED"
-    @in_journey = false
-    @entry_station = nil
-    @exit_station = nil
+
     @journey_log = {}
   end
 
@@ -20,24 +19,14 @@ class Oystercard
 
   def touch_in(station)
     fail "Insufficient funds for minimum fair" if @balance < MINIMUM_FAIR
-    @card_state = "ACTIVATED"
-    @in_journey = true
-    @entry_station = station
   end
 
   def touch_out(exit_station)
     deduct(MINIMUM_FAIR)
-    @exit_station = exit_station
     @journey_log.store(@entry_station, @exit_station)
-    @card_state = "DEACTIVED"
   end
 
   def in_journey?
-    if @card_state == "ACTIVATED"
-      return true
-    else
-      return false
-    end
     !!entry_station
   end
 
